@@ -1,0 +1,18 @@
+services:
+  database:
+    build: .
+    ports: 
+      - "${DB_PORT}:3000"
+    environment:
+      - REDIS_HOST=${DB_HOST}
+      - REDIS_PORT=${DB_PORT}
+    redis:
+      image: pg:alpine
+
+  frontend:
+    redis:
+      image: node:alpine
+
+  backend:
+    redis:
+      image: node:alpine
