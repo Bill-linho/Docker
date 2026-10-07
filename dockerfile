@@ -1,23 +1,31 @@
-FROM node:alpine AS frontend
+# backend
 
-WORKDIR /frontend
+FROM node:24-alpine AS backend
 
-COPY packge.json ./
+WORKDIR /app
 
-RUN npm ci
+COPY ./backend/package*.json /app
 
-EXPOSE 8787
+RUN npm i
 
-CMD ["npm","run","dev","--","vite"]
-
-FROM node:alpine AS backend
-
-WORKDIR /backend
-
-COPY packge.json ./
-
-RUN npm ci
+COPY ./backend/ /app/
 
 EXPOSE 3000
 
-CMD ["npm","run","dev","--","node","--watch","src/main.js"]
+CMD ["npm","start"]
+
+# frontend
+
+FROM node:24-alpine AS frontend
+
+WORKDIR /app
+
+COPY ./frontend/package*.json /app
+
+RUN npm i
+
+COPY ./frontend/ /app/
+
+EXPOSE 5757
+
+CMD ["npm","run","dev","--","--host","0.0.0.0","--port","5757"]
